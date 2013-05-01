@@ -51,6 +51,7 @@ ofxBezierWarp::ofxBezierWarp(){
     warpHeight = 0;
     bShowWarpGrid = false;
     bWarpPositionDiff = false;
+    selectedPointIndex = 0;
 }
 
 //--------------------------------------------------------------
@@ -178,7 +179,10 @@ void ofxBezierWarp::drawWarpGrid(float x, float y, float w, float h){
     for(int i = 0; i < numYPoints; i++){
         for(int j = 0; j < numXPoints; j++){
             ofFill();
-            ofSetColor(255, 0, 0);
+            if (i*numXPoints+j == selectedPointIndex)
+                ofSetColor(0, 255, 0);
+            else
+                ofSetColor(255, 0, 0);
             ofCircle(cntrlPoints[(i*numXPoints+j)*3+0], cntrlPoints[(i*numXPoints+j)*3+1], 5);
             ofNoFill();
         }
@@ -389,4 +393,72 @@ void ofxBezierWarp::mousePressed(ofMouseEventArgs & e){
 void ofxBezierWarp::mouseReleased(ofMouseEventArgs & e){
     currentCntrlX = -1;
     currentCntrlY = -1;
+}
+
+//--------------------------------------------------------------
+bool ofxBezierWarp::loadXMLWithFileName(string s)
+{
+    XML.loadFile(s);
+}
+
+//--------------------------------------------------------------
+void ofxBezierWarp::loadPointsFromXML()
+{
+    
+}
+
+//--------------------------------------------------------------
+bool ofxBezierWarp::save()
+{
+    XML.saveFile();
+}
+
+//--------------------------------------------------------------
+void ofxBezierWarp::selectNextPointIndex()
+{
+    selectedPointIndex = selectedPointIndex + 1;
+    if (selectedPointIndex > numYPoints * numXPoints - 1) {
+        selectedPointIndex = 0;
+    }
+}
+
+//--------------------------------------------------------------
+void ofxBezierWarp::selectPrevPointIndex()
+{
+    selectedPointIndex = selectedPointIndex - 1;
+    if (selectedPointIndex < 0) {
+        selectedPointIndex = numYPoints * numXPoints - 1;
+    }
+
+}
+
+//--------------------------------------------------------------
+void ofxBezierWarp::setSelectedPointPosition(float x, float y)
+{
+    cntrlPoints[(selectedPointIndex)*3+0] = x;
+    cntrlPoints[(selectedPointIndex)*3+1] = y;
+}
+
+//--------------------------------------------------------------
+void ofxBezierWarp::moveSelectedPointPositionUp()
+{
+    cntrlPoints[(selectedPointIndex)*3+1] -= 1;
+}
+
+//--------------------------------------------------------------
+void ofxBezierWarp::moveSelectedPointPositionDown()
+{
+    cntrlPoints[(selectedPointIndex)*3+1] += 1;
+}
+
+//--------------------------------------------------------------
+void ofxBezierWarp::moveSelectedPointPositionLeft()
+{
+    cntrlPoints[(selectedPointIndex)*3+0] -= 1;
+}
+
+//--------------------------------------------------------------
+void ofxBezierWarp::moveSelectedPointPositionRight()
+{
+    cntrlPoints[(selectedPointIndex)*3+0] += 1;
 }

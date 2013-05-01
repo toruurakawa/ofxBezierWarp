@@ -92,6 +92,25 @@ void testApp::keyPressed(int key){
         case OF_KEY_LEFT:
             warp.setWarpGrid(warp.getNumXPoints() - 1, warp.getNumYPoints());
             break;
+        case 'z':
+            warp.selectPrevPointIndex();
+            break;
+        case 'x':
+            warp.selectNextPointIndex();
+            break;
+        case 'j':
+            warp.moveSelectedPointPositionDown();
+            break;
+        case 'k':
+            warp.moveSelectedPointPositionUp();
+            break;
+        case 'h':
+            warp.moveSelectedPointPositionLeft();
+            break;
+        case 'l':
+            warp.moveSelectedPointPositionRight();
+            break;
+
     }
 }
 

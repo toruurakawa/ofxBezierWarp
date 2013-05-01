@@ -37,6 +37,7 @@
 #include "ofFbo.h"
 #include "ofGraphics.h"
 #include "ofEvents.h"
+#include "ofxXmlSettings.h"
 
 class ofxBezierWarp {
     
@@ -91,6 +92,20 @@ public:
     void mousePressed(ofMouseEventArgs & e);
     void mouseReleased(ofMouseEventArgs & e);
     
+    bool loadXMLWithFileName(string);
+    void loadPointsFromXML();
+    bool save();
+
+    int selectedPointIndex;
+    void selectNextPointIndex();
+    void selectPrevPointIndex();
+   
+    void setSelectedPointPosition(float x, float y);
+    void moveSelectedPointPositionUp();
+    void moveSelectedPointPositionDown();
+    void moveSelectedPointPositionLeft();
+    void moveSelectedPointPositionRight();
+    
 protected:
 	
     void drawWarpGrid(float x, float y, float w, float h);
@@ -119,6 +134,7 @@ protected:
     
     vector<GLfloat> cntrlPoints;
     
+    ofxXmlSettings XML;
 private:
 	
 };

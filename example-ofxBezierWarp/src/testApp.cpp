@@ -20,6 +20,10 @@ void testApp::setup(){
     // but an 1820 x 1024 size will only use a 2048 x 1024 internal fbo ;)
     
     warp.allocate(ofGetWidth(), ofGetHeight(), 5, 4, 80);
+    if (warp.loadXMLWithFileName("mySettings.xml")){
+        cout << "XML has been loaded!" << endl;
+        warp.loadPointsFromXML();
+    }
     
     ofBackground(0, 0, 0);
 }
@@ -91,6 +95,15 @@ void testApp::keyPressed(int key){
             break;
         case OF_KEY_LEFT:
             warp.setWarpGrid(warp.getNumXPoints() - 1, warp.getNumYPoints());
+            break;
+        case 'd':
+            warp.loadXML();
+            break;
+        case 'f':
+            warp.loadPointsFromXML();
+            break;
+        case 'g':
+            warp.saveXML();
             break;
         case 'z':
             warp.selectPrevPointIndex();

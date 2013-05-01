@@ -92,9 +92,13 @@ public:
     void mousePressed(ofMouseEventArgs & e);
     void mouseReleased(ofMouseEventArgs & e);
     
+    
+    string xmlFileName;
     bool loadXMLWithFileName(string);
+    bool loadXML();
     void loadPointsFromXML();
-    bool save();
+    bool saveXMLWitfhFileName(string);
+    bool saveXML();
 
     int selectedPointIndex;
     void selectNextPointIndex();

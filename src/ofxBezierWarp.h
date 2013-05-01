@@ -139,6 +139,8 @@ protected:
     vector<GLfloat> cntrlPoints;
     
     ofxXmlSettings XML;
+    void savePointsToXML();
+    
 private:
 	
 };

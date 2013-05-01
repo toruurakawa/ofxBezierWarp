@@ -435,26 +435,7 @@ void ofxBezierWarp::loadPointsFromXML()
 //--------------------------------------------------------------
 bool ofxBezierWarp::saveXMLWitfhFileName(string s)
 {
-    vector<GLfloat>& v = this->getControlPointsReference();
-    int lastTagNumber	= 0;
-
-    if( XML.pushTag("SETTINGS", lastTagNumber) ){
-        XML.setValue("POINT_SIZE_X", numXPoints);
-        XML.setValue("POINT_SIZE_Y", numYPoints);
-        XML.popTag();
-    }
-    
-    for (int i = 0; i < v.size(); i+= 3){
-        cout << v[i] << "   " << v[i+1] << "    " << v[i+2] << endl;
-        if( XML.pushTag("SETTINGS", lastTagNumber) ){
-            //now we will add a pt tag - with two
-            //children - X and Y
-            int tagNum = XML.addTag("PT");
-            XML.setValue("PT:X", v[i], tagNum);
-            XML.setValue("PT:Y", v[i+1], tagNum);
-            XML.popTag();
-        }
-    }
+    savePointsToXML();
     
     return XML.saveFile(s);
 }
@@ -462,29 +443,7 @@ bool ofxBezierWarp::saveXMLWitfhFileName(string s)
 //--------------------------------------------------------------
 bool ofxBezierWarp::saveXML()
 {
-    vector<GLfloat>& v = this->getControlPointsReference();
-    int lastTagNumber	= 0;
-    
-    XML.clear();
-    XML.addTag("SETTINGS");
-    
-    if( XML.pushTag("SETTINGS", lastTagNumber) ){
-        XML.setValue("POINT_SIZE_X", numXPoints);
-        XML.setValue("POINT_SIZE_Y", numYPoints);
-        XML.popTag();
-    }
-    
-    for (int i = 0; i < v.size(); i+= 3){
-        if( XML.pushTag("SETTINGS", lastTagNumber) ){
-            cout << v[i] << "       " << v[i+1] << "        " << v[i+2] << endl;
-            //now we will add a pt tag - with two
-            //children - X and Y
-            int tagNum = XML.addTag("PT");
-            XML.setValue("PT:X", v[i], tagNum);
-            XML.setValue("PT:Y", v[i+1], tagNum);
-            XML.popTag();
-        }
-    }
+    savePointsToXML();
     
     return XML.saveFile(xmlFileName);
 }
@@ -537,6 +496,35 @@ void ofxBezierWarp::moveSelectedPointPositionLeft()
 void ofxBezierWarp::moveSelectedPointPositionRight()
 {
     cntrlPoints[(selectedPointIndex)*3+0] += 1;
+}
+
+//--------------------------------------------------------------
+void ofxBezierWarp::savePointsToXML()
+{
+    vector<GLfloat>& v = getControlPointsReference();
+    int lastTagNumber	= 0;
+    
+    XML.clear();
+    XML.addTag("SETTINGS");
+    
+    if( XML.pushTag("SETTINGS", lastTagNumber) ){
+        XML.setValue("POINT_SIZE_X", numXPoints);
+        XML.setValue("POINT_SIZE_Y", numYPoints);
+        XML.popTag();
+    }
+    
+    for (int i = 0; i < v.size(); i+= 3){
+        if( XML.pushTag("SETTINGS", lastTagNumber) ){
+            cout << v[i] << "       " << v[i+1] << "        " << v[i+2] << endl;
+            //now we will add a pt tag - with two
+            //children - X and Y
+            int tagNum = XML.addTag("PT");
+            XML.setValue("PT:X", v[i], tagNum);
+            XML.setValue("PT:Y", v[i+1], tagNum);
+            XML.popTag();
+        }
+    }
+    
 }
 
 

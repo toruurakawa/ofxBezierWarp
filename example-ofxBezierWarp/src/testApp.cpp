@@ -6,7 +6,7 @@ void testApp::setup(){
     bUseWarp = true;
     
     // load a movie for testing purposes
-    vid.loadMovie("pathtoyourmovie.mov");
+    vid.loadMovie("test_with_hand.mov");
     vid.play();
     
     // allocate the warp with width, height, numXControlPoints,  
@@ -62,7 +62,12 @@ void testApp::draw(){
     ostringstream os;
     os << "Press 'w' to toggle using warp" << endl;
     os << "Press 'r' to reset the warp grid" << endl;
-    os << "Press 's' to show the warp grid" << endl;
+    os << "Press 'g' to show the warp grid" << endl;
+    os << "Press 'f' to fetch points from a XML file" << endl;
+    os << "Press 's' to save current settings to the XML file" << endl;
+    os << "Press 'z' to select next point" << endl;
+    os << "Press 'x' to select previous point" << endl;
+    os << "Press 'j,k,h,l' to move selected point Down/Up/Left/Right" << endl;
     os << "Use arrow keys to increase/decrease number of warp control points" << endl;
     os << endl;
     os << "FPS: " << ofGetFrameRate();
@@ -79,11 +84,11 @@ void testApp::keyPressed(int key){
             warp.resetWarpGrid();
             break;
         case 's':
-            warp.toggleShowWarpGrid();
+            warp.saveXML();
             break;
-        case 'p':
-            warp.setWarpGridPosition(100, 100, (ofGetWidth() - 200), (ofGetHeight() - 200));
-            break;
+//        case 'p':
+//            warp.setWarpGridPosition(100, 100, (ofGetWidth() - 200), (ofGetHeight() - 200));
+//            break;
         case OF_KEY_UP:
             warp.setWarpGrid(warp.getNumXPoints(), warp.getNumYPoints() + 1);
             break;
@@ -96,14 +101,15 @@ void testApp::keyPressed(int key){
         case OF_KEY_LEFT:
             warp.setWarpGrid(warp.getNumXPoints() - 1, warp.getNumYPoints());
             break;
-        case 'd':
-            warp.loadXML();
-            break;
         case 'f':
+            warp.loadXML();
             warp.loadPointsFromXML();
             break;
+//        case 'f':
+//            warp.loadPointsFromXML();
+//            break;
         case 'g':
-            warp.saveXML();
+            warp.toggleShowWarpGrid();
             break;
         case 'z':
             warp.selectPrevPointIndex();
@@ -123,7 +129,9 @@ void testApp::keyPressed(int key){
         case 'l':
             warp.moveSelectedPointPositionRight();
             break;
-
+        case 'p':
+            ofToggleFullscreen();
+            break;
     }
 }
 

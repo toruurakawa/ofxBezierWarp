@@ -6,13 +6,13 @@ void testApp::setup(){
     bUseWarp = true;
     
     // load a movie for testing purposes
-    vid.loadMovie("test_with_hand.mov");
+    vid.loadMovie("wall.mov");
     vid.play();
     
     // allocate the warp with width, height, numXControlPoints,  
     // numYControlPoints, and the resolution of grid divisions in pixels
     
-    // NB: the bezier warp needs to use only power of 2 sizes internally
+    // NB: the bezier warp needs to use only power of 2 sizes internallyxr
     // but can use any width/height passed during allocation (internally
     // we scale the fbo we are warping) - so it's good to sometimes use
     // sizes a little smaller than normal if efficieny is your thing
@@ -26,6 +26,7 @@ void testApp::setup(){
     }
     
     ofBackground(0, 0, 0);
+    bShowVideo = true;
 }
 
 //--------------------------------------------------------------
@@ -40,7 +41,8 @@ void testApp::update(){
         
         warp.begin();
         {
-            vid.draw(0, 0, ofGetWidth(), ofGetHeight());
+            if(bShowVideo) vid.draw(0, 0, ofGetWidth(), ofGetHeight());
+            
         }
         warp.end();
         
@@ -58,20 +60,22 @@ void testApp::draw(){
         vid.draw(0, 0, ofGetWidth(), ofGetHeight());
     }
     
-    // show some info
-    ostringstream os;
-    os << "Press 'w' to toggle using warp" << endl;
-    os << "Press 'r' to reset the warp grid" << endl;
-    os << "Press 'g' to show the warp grid" << endl;
-    os << "Press 'f' to fetch points from a XML file" << endl;
-    os << "Press 's' to save current settings to the XML file" << endl;
-    os << "Press 'z' to select next point" << endl;
-    os << "Press 'x' to select previous point" << endl;
-    os << "Press 'j,k,h,l' to move selected point Down/Up/Left/Right" << endl;
-    os << "Use arrow keys to increase/decrease number of warp control points" << endl;
-    os << endl;
-    os << "FPS: " << ofGetFrameRate();
-    ofDrawBitmapString(os.str(), 20, 20);
+    if (bShowText) {
+        // show some info
+        ostringstream os;
+        os << "Press 'w' to toggle using warp" << endl;
+        os << "Press 'r' to reset the warp grid" << endl;
+        os << "Press 'g' to show the warp grid" << endl;
+        os << "Press 'f' to fetch points from a XML file" << endl;
+        os << "Press 's' to save current settings to the XML file" << endl;
+        os << "Press 'z' to select next point" << endl;
+        os << "Press 'x' to select previous point" << endl;
+        os << "Press 'j,k,h,l' to move selected point Down/Up/Left/Right" << endl;
+        os << "Use arrow keys to increase/decrease number of warp control points" << endl;
+        os << endl;
+        os << "FPS: " << ofGetFrameRate();
+        ofDrawBitmapString(os.str(), 20, 20);
+    }
 }
 
 //--------------------------------------------------------------
@@ -118,18 +122,37 @@ void testApp::keyPressed(int key){
             warp.selectNextPointIndex();
             break;
         case 'j':
-            warp.moveSelectedPointPositionDown();
+            if(warp.isAdjustingRow || warp.isAdjustingColumn)  warp.moveSelectedLineDown();
+            else warp.moveSelectedPointPositionDown();
             break;
         case 'k':
-            warp.moveSelectedPointPositionUp();
+            if(warp.isAdjustingRow || warp.isAdjustingColumn)  warp.moveSelectedLineUp();
+            else warp.moveSelectedPointPositionUp();
             break;
         case 'h':
+            if(warp.isAdjustingRow || warp.isAdjustingColumn)  warp.moveSelectedLineLeft();
             warp.moveSelectedPointPositionLeft();
             break;
         case 'l':
+            if(warp.isAdjustingRow || warp.isAdjustingColumn)  warp.moveSelectedLineRight();
             warp.moveSelectedPointPositionRight();
             break;
         case 'p':
+            warp.adjustByPoint();
+            break;
+        case 'c':
+            warp.adjustByRow();
+            break;
+        case ',':
+            warp.adjustByColumn();
+            break;
+        case 'v':
+            bShowVideo = !bShowVideo;
+            break;
+        case 't':
+            bShowText = !bShowText;
+            break;
+        case '1':
             ofToggleFullscreen();
             break;
     }

@@ -110,6 +110,22 @@ public:
     void moveSelectedPointPositionLeft();
     void moveSelectedPointPositionRight();
     
+    bool isAdjustingRow;
+    bool isAdjustingColumn;
+    int  row;
+    int  column;
+    void adjustByPoint();
+    void adjustByRow();
+    void adjustByColumn();
+    void incrementRow();
+    void incrementColumn();
+    void decrementRow();
+    void decrementColumn();
+    void moveSelectedLineUp();
+    void moveSelectedLineDown();
+    void moveSelectedLineLeft();
+    void moveSelectedLineRight();
+    
 protected:
 	
     void drawWarpGrid(float x, float y, float w, float h);

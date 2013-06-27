@@ -52,6 +52,8 @@ ofxBezierWarp::ofxBezierWarp(){
     bShowWarpGrid = false;
     bWarpPositionDiff = false;
     selectedPointIndex = 0;
+    isAdjustingRow = isAdjustingColumn = false;
+    column = row = 0;
 }
 
 //--------------------------------------------------------------
@@ -179,7 +181,9 @@ void ofxBezierWarp::drawWarpGrid(float x, float y, float w, float h){
     for(int i = 0; i < numYPoints; i++){
         for(int j = 0; j < numXPoints; j++){
             ofFill();
-            if (i*numXPoints+j == selectedPointIndex)
+            if ( ((i*numXPoints+j == selectedPointIndex) && (!isAdjustingRow && !isAdjustingColumn))
+                || (isAdjustingRow && j == row)
+                || (isAdjustingColumn && i == column))
                 ofSetColor(0, 255, 0);
             else
                 ofSetColor(255, 0, 0);
@@ -527,4 +531,139 @@ void ofxBezierWarp::savePointsToXML()
     
 }
 
+//--------------------------------------------------------------
+void ofxBezierWarp::adjustByPoint()
+{
+    isAdjustingRow      = false;
+    isAdjustingColumn   = false;
+}
 
+//--------------------------------------------------------------
+void ofxBezierWarp::adjustByRow()
+{
+    isAdjustingRow = true;
+    isAdjustingColumn = false;
+}
+
+//--------------------------------------------------------------
+void ofxBezierWarp::adjustByColumn()
+{
+    isAdjustingRow = false;
+    isAdjustingColumn = true;
+}
+
+//--------------------------------------------------------------
+void ofxBezierWarp::incrementRow()
+{
+    int tmp = row + 1;
+    if (tmp >= numXPoints) {
+        tmp = 0;
+    }
+    row = tmp;
+}
+
+//--------------------------------------------------------------
+void ofxBezierWarp::incrementColumn()
+{
+    int tmp = column + 1;
+    if (tmp >= numYPoints) {
+        tmp = 0;
+    }
+    column = tmp;
+}
+
+//--------------------------------------------------------------
+void ofxBezierWarp::decrementRow()
+{
+    int tmp = row - 1;
+    if (tmp < 0) {
+        tmp = numXPoints - 1;
+    }
+    row = tmp;
+}
+
+//--------------------------------------------------------------
+void ofxBezierWarp::decrementColumn()
+{
+    int tmp = column - 1;
+    if (tmp < 0) {
+        tmp = numYPoints - 1;
+    }
+    column = tmp;
+}
+
+//--------------------------------------------------------------
+void ofxBezierWarp::moveSelectedLineUp()
+{
+    if (isAdjustingRow) {
+        for (int i = 0; i < numXPoints * numYPoints; i++) {
+            if (i % numXPoints == row) {
+                cntrlPoints[i*3+1] -= 1;
+            }
+        }
+    }
+    else if (isAdjustingColumn) {
+        for (int i = 0; i < numXPoints * numYPoints; i++) {
+            if (int(i / numXPoints) == column) {
+                cntrlPoints[i*3+1] -= 1;
+            }
+        }
+    }
+}
+
+//--------------------------------------------------------------
+void ofxBezierWarp::moveSelectedLineDown()
+{
+    if (isAdjustingRow) {
+        for (int i = 0; i < numXPoints * numYPoints; i++) {
+            if (i % numXPoints == row) {
+                cntrlPoints[i*3+1] += 1;
+            }
+        }
+    }
+    else if (isAdjustingColumn) {
+        for (int i = 0; i < numXPoints * numYPoints; i++) {
+            if (int(i / numXPoints) == column) {
+                cntrlPoints[i*3+1] += 1;
+            }
+        }
+    }
+}
+
+//--------------------------------------------------------------
+void ofxBezierWarp::moveSelectedLineLeft()
+{
+    if (isAdjustingRow) {
+        for (int i = 0; i < numXPoints * numYPoints; i++) {
+            if (i % numXPoints == row) {
+                cntrlPoints[i*3] -= 1;
+            }
+        }
+    }
+    else if (isAdjustingColumn) {
+        for (int i = 0; i < numXPoints * numYPoints; i++) {
+            if (int(i / numXPoints) == column) {
+                cntrlPoints[i*3] -= 1;
+            }
+        }
+    }
+}
+
+//--------------------------------------------------------------
+void ofxBezierWarp::moveSelectedLineRight()
+{
+    if (isAdjustingRow) {
+        for (int i = 0; i < numXPoints * numYPoints; i++) {
+            if (i % numXPoints == row) {
+                cntrlPoints[i*3] += 1;
+            }
+        }
+    }
+    else if (isAdjustingColumn) {
+        for (int i = 0; i < numXPoints * numYPoints; i++) {
+            if (int(i / numXPoints) == column) {
+                cntrlPoints[i*3] += 1;
+            }
+        }
+    }
+}

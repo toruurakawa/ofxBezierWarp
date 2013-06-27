@@ -24,5 +24,8 @@ class testApp : public ofBaseApp{
     
         ofxBezierWarp warp;
         bool bUseWarp;
+    
+        bool bShowVideo;
+        bool bShowText;
 		
 };

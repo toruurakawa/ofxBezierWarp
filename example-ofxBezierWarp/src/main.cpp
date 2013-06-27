@@ -9,7 +9,7 @@ int main( ){
     window.setGlutDisplayString("rgba double depth samples>=4");
     window.setGlutDisplayString("rgba double depth alpha samples>=4");
 
-	ofSetupOpenGL(&window, 1280, 720, OF_WINDOW);			// <-------- setup the GL context
+	ofSetupOpenGL(&window, 1200, 800, OF_WINDOW);			// <-------- setup the GL context
 
 	// this kicks off the running of my app
 	// can be OF_WINDOW or OF_FULLSCREEN
